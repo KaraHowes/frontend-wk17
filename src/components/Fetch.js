@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Link } from 'react-router-dom'
 
 const CardContainer = styled.section`
 display: flex;
@@ -21,33 +22,38 @@ const Card = styled.div`
 `;
 const Fetch = () => {
   const [winners, setWinners] = useState([]);
+  
 
   useEffect(() => {
-    fetch(`https://kh-nobelprize-api.herokuapp.com`)
+    fetch(`https://kh-nobelprize-api.herokuapp.com/winners`)
       .then((res) => res.json())
       .then((json) => {
         setWinners(json);
       });
   });
 
+
+
   return (
+    <>
     <CardContainer>
       {winners.map((winner) => (
-        <Card>
+        <Card key={winner.surname}>
           <img
             className="medal"
             src="/assets/Nobel_Prize.png"
             alt="Nobel medal"
           />
           <h1>
-            {" "}
             {winner.firstname} {winner.surname}
           </h1>
-          <h2> {winner.category}</h2>
+          <Link to={`/category/${winner.category}`}><h2>{winner.category}</h2></Link>
           <h3> {winner.year}</h3>
         </Card>
       ))}
     </CardContainer>
+    </>
   );
+  
 };
 export default Fetch;
